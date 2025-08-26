@@ -89,7 +89,7 @@
             font-size: 1.1em;
         }
         
-        .form-group input, .form-group select {
+        .form-group input {
             width: 100%;
             padding: 15px;
             border: 2px solid #e1e5e9;
@@ -99,7 +99,7 @@
             background: #f8f9fa;
         }
         
-        .form-group input:focus, .form-group select:focus {
+        .form-group input:focus {
             border-color: #0056b3;
             background: #fff;
             box-shadow: 0 0 0 3px rgba(0, 86, 179, 0.1);
@@ -213,6 +213,16 @@
             transform: translateY(-2px);
         }
         
+        .btn-tertiary {
+            background: linear-gradient(135deg, #17a2b8 0%, #138496 100%);
+            color: white;
+        }
+        
+        .btn-tertiary:hover {
+            background: #138496;
+            transform: translateY(-2px);
+        }
+        
         @media (max-width: 768px) {
             .container {
                 margin: 10px;
@@ -277,6 +287,8 @@
         <div class="form-content">
             <div class="intro-text">
                 <p>Eu, <input type="text" class="inline-field" id="nomeResponsavel" name="nomeResponsavel" placeholder="Nome completo do(a) responsável" required>, portador(a) do CPF nº <input type="text" class="inline-field" id="cpfResponsavel" name="cpfResponsavel" placeholder="___.___.___-__" style="min-width: 150px;" required>, responsável legal pelo(a) menor:</p>
+                <div id="cpfError" class="error-message"></div>
+                <div id="cpfSuccess" class="success-message"></div>
             </div>
             
             <div class="form-group">
@@ -333,6 +345,7 @@
                 <button type="button" class="btn btn-primary" onclick="window.print()">🖨️ Imprimir Formulário</button>
                 <button type="button" class="btn btn-secondary" onclick="limparFormulario()">🗑️ Limpar Campos</button>
                 <button type="button" class="btn btn-primary" onclick="validarIdade()">✅ Validar Idade</button>
+                <button type="button" class="btn btn-tertiary" onclick="validarCPF()">✅ Validar CPF</button>
             </div>
         </div>
     </div>
@@ -346,6 +359,8 @@
                 // Limpar mensagens de validação
                 document.getElementById('idadeError').style.display = 'none';
                 document.getElementById('idadeSuccess').style.display = 'none';
+                document.getElementById('cpfError').style.display = 'none';
+                document.getElementById('cpfSuccess').style.display = 'none';
             }
         }
 
@@ -380,8 +395,71 @@
             }
         }
 
+        // Função para validar CPF
+        function validarCPF() {
+            const cpfInput = document.getElementById('cpfResponsavel');
+            const errorDiv = document.getElementById('cpfError');
+            const successDiv = document.getElementById('cpfSuccess');
+            
+            // Esconder mensagens anteriores
+            errorDiv.style.display = 'none';
+            successDiv.style.display = 'none';
+            
+            // Remover caracteres não numéricos
+            const cpf = cpfInput.value.replace(/\D/g, '');
+            
+            // Verificar se o CPF tem 11 dígitos
+            if (cpf.length !== 11) {
+                errorDiv.textContent = 'CPF deve conter 11 dígitos.';
+                errorDiv.style.display = 'block';
+                return;
+            }
+            
+            // Verificar se todos os dígitos são iguais (CPF inválido)
+            if (/^(\d)\1{10}$/.test(cpf)) {
+                errorDiv.textContent = 'CPF inválido.';
+                errorDiv.style.display = 'block';
+                return;
+            }
+            
+            // Validar primeiro dígito verificador
+            let soma = 0;
+            for (let i = 0; i < 9; i++) {
+                soma += parseInt(cpf.charAt(i)) * (10 - i);
+            }
+            let resto = 11 - (soma % 11);
+            let digitoVerificador1 = resto === 10 || resto === 11 ? 0 : resto;
+            
+            if (digitoVerificador1 !== parseInt(cpf.charAt(9))) {
+                errorDiv.textContent = 'CPF inválido.';
+                errorDiv.style.display = 'block';
+                return;
+            }
+            
+            // Validar segundo dígito verificador
+            soma = 0;
+            for (let i = 0; i < 10; i++) {
+                soma += parseInt(cpf.charAt(i)) * (11 - i);
+            }
+            resto = 11 - (soma % 11);
+            let digitoVerificador2 = resto === 10 || resto === 11 ? 0 : resto;
+            
+            if (digitoVerificador2 !== parseInt(cpf.charAt(10))) {
+                errorDiv.textContent = 'CPF inválido.';
+                errorDiv.style.display = 'block';
+                return;
+            }
+            
+            // CPF válido
+            successDiv.textContent = 'CPF válido!';
+            successDiv.style.display = 'block';
+        }
+
         // Validar idade quando o campo perder o foco
         document.getElementById('idadeMenor').addEventListener('blur', validarIdade);
+        
+        // Validar CPF quando o campo perder o foco
+        document.getElementById('cpfResponsavel').addEventListener('blur', validarCPF);
 
         // Máscara para CPF
         document.getElementById('cpfResponsavel').addEventListener('input', function(e) {
@@ -390,6 +468,10 @@
             value = value.replace(/(\d{3})(\d)/, '$1.$2');
             value = value.replace(/(\d{3})(\d{1,2})$/, '$1-$2');
             e.target.value = value;
+            
+            // Limpar mensagens de validação ao digitar
+            document.getElementById('cpfError').style.display = 'none';
+            document.getElementById('cpfSuccess').style.display = 'none';
         });
 
         // Máscara para telefone
