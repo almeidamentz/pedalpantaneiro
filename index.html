@@ -286,7 +286,7 @@
         
         <div class="form-content">
             <div class="intro-text">
-                <p>Eu, <input type="text" class="inline-field" id="nomeResponsavel" name="nomeResponsavel" placeholder="Nome completo do(a) responsável" required>, portador(a) do CPF nº <input type="text" class="inline-field" id="cpfResponsavel" name="cpfResponsavel" placeholder="___.___.___-__" style="min-width: 150px;" required>, responsável legal pelo(a) menor:</p>
+                <p>Eu, <input type="text" class="inline-field" id="nomeResponsavel" name="nomeResponsavel" placeholder="Nome completo do(a) responsável" required>, portador(a) do CPF nº <input type="text" class="inline-field" id="cpfResponsavel" name="cpfResponsavel" placeholder="___.___.___-__" style="min-width: 150px;" maxlength="14" required>, responsável legal pelo(a) menor:</p>
                 <div id="cpfError" class="error-message"></div>
                 <div id="cpfSuccess" class="success-message"></div>
             </div>
@@ -305,7 +305,7 @@
 
             <div class="form-group">
                 <label for="telefoneResponsavel">Telefone do responsável:</label>
-                <input type="tel" id="telefoneResponsavel" name="telefoneResponsavel" placeholder="(XX) XXXXX-XXXX" required>
+                <input type="tel" id="telefoneResponsavel" name="telefoneResponsavel" placeholder="(XX) XXXXX-XXXX" maxlength="15" required>
             </div>
 
             <div class="form-group">
@@ -410,7 +410,7 @@
             
             // Verificar se o CPF tem 11 dígitos
             if (cpf.length !== 11) {
-                errorDiv.textContent = 'CPF deve conter 11 dígitos.';
+                errorDiv.textContent = 'CPF deve conter exatamente 11 dígitos.';
                 errorDiv.style.display = 'block';
                 return;
             }
@@ -461,12 +461,27 @@
         // Validar CPF quando o campo perder o foco
         document.getElementById('cpfResponsavel').addEventListener('blur', validarCPF);
 
-        // Máscara para CPF
+        // Máscara para CPF com limitação de caracteres
         document.getElementById('cpfResponsavel').addEventListener('input', function(e) {
+            // Obter valor atual e remover caracteres não numéricos
             let value = e.target.value.replace(/\D/g, '');
-            value = value.replace(/(\d{3})(\d)/, '$1.$2');
-            value = value.replace(/(\d{3})(\d)/, '$1.$2');
-            value = value.replace(/(\d{3})(\d{1,2})$/, '$1-$2');
+            
+            // Limitar a 11 dígitos
+            if (value.length > 11) {
+                value = value.substring(0, 11);
+            }
+            
+            // Aplicar a máscara
+            if (value.length > 3) {
+                value = value.replace(/(\d{3})(\d)/, '$1.$2');
+            }
+            if (value.length > 6) {
+                value = value.replace(/(\d{3})\.(\d{3})(\d)/, '$1.$2.$3');
+            }
+            if (value.length > 9) {
+                value = value.replace(/(\d{3})\.(\d{3})\.(\d{3})(\d)/, '$1.$2.$3-$4');
+            }
+            
             e.target.value = value;
             
             // Limpar mensagens de validação ao digitar
@@ -474,9 +489,26 @@
             document.getElementById('cpfSuccess').style.display = 'none';
         });
 
+        // Impedir a digitação de mais de 11 números
+        document.getElementById('cpfResponsavel').addEventListener('keypress', function(e) {
+            // Obter valor atual sem formatação
+            const currentValue = this.value.replace(/\D/g, '');
+            
+            // Se já tiver 11 dígitos, impedir nova digitação
+            if (currentValue.length >= 11 && e.key !== 'Backspace' && e.key !== 'Delete') {
+                e.preventDefault();
+            }
+        });
+
         // Máscara para telefone
         document.getElementById('telefoneResponsavel').addEventListener('input', function(e) {
             let value = e.target.value.replace(/\D/g, '');
+            
+            // Limitar a 11 dígitos
+            if (value.length > 11) {
+                value = value.substring(0, 11);
+            }
+            
             value = value.replace(/(\d{2})(\d)/, '($1) $2');
             value = value.replace(/(\d{5})(\d)/, '$1-$2');
             e.target.value = value;
