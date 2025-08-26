@@ -59,7 +59,7 @@
         .inline-field {
             display: inline-block;
             border-bottom: 2px solid #0056b3;
-            min-width: 300px; /* Alterado para maior tamanho */
+            min-width: 300px;
             padding: 2px 8px;
             margin: 0 5px;
             background: transparent;
@@ -118,6 +118,29 @@
             font-size: 0.9em;
             margin-top: 5px;
             display: none;
+        }
+        
+        .cidade-sugestoes {
+            display: none;
+            position: absolute;
+            background: white;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            width: 100%;
+            max-height: 200px;
+            overflow-y: auto;
+            z-index: 1000;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        
+        .cidade-sugestoes div {
+            padding: 10px;
+            cursor: pointer;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .cidade-sugestoes div:hover {
+            background-color: #f0f0f0;
         }
         
         .declaration {
@@ -237,6 +260,10 @@
             .error-message, .success-message {
                 display: none !important;
             }
+            
+            .cidade-sugestoes {
+                display: none !important;
+            }
         }
     </style>
 </head>
@@ -276,14 +303,15 @@
 
             <div class="form-group">
                 <label for="cidade">Cidade:</label>
-                <select id="cidade" name="cidade" required>
-                    <option value="">Selecione uma cidade...</option>
-                    <option value="Poconé">Poconé</option>
-                    <option value="Cuiabá">Cuiabá</option>
-                    <option value="Várzea Grande">Várzea Grande</option>
-                    <option value="Tangará da Serra">Tangará da Serra</option>
-                    <option value="Outra">Nossa Senhora do Livramento</option>
-                </select>
+                <input type="text" id="cidade" name="cidade" placeholder="Digite o nome da cidade" list="cidadesLista" required>
+                <div id="cidadeSugestoes" class="cidade-sugestoes"></div>
+                <datalist id="cidadesLista">
+                    <option value="Poconé">
+                    <option value="Cuiabá">
+                    <option value="Várzea Grande">
+                    <option value="Tangará da Serra">
+                    <option value="Nossa Senhora do Livramento">
+                </datalist>
             </div>
 
             <div class="form-group">
@@ -315,7 +343,6 @@
                 document.querySelectorAll('input').forEach(input => {
                     input.value = '';
                 });
-                document.getElementById('cidade').value = '';
                 // Limpar mensagens de validação
                 document.getElementById('idadeError').style.display = 'none';
                 document.getElementById('idadeSuccess').style.display = 'none';
@@ -383,6 +410,56 @@
             const campoData = document.getElementById('dataAtual');
             if (campoData.value === '') {
                 campoData.value = dataFormatada;
+            }
+        });
+
+        // Sugestões de cidades
+        const cidades = ["Poconé", "Cuiabá", "Várzea Grande", "Tangará da Serra", "Nossa Senhora do Livramento"];
+        const cidadeInput = document.getElementById('cidade');
+        const sugestoesDiv = document.getElementById('cidadeSugestoes');
+
+        cidadeInput.addEventListener('focus', function() {
+            mostrarSugestoes();
+        });
+
+        cidadeInput.addEventListener('input', function() {
+            mostrarSugestoes();
+        });
+
+        function mostrarSugestoes() {
+            const texto = cidadeInput.value.toLowerCase();
+            sugestoesDiv.innerHTML = '';
+            
+            if (texto === '') {
+                sugestoesDiv.style.display = 'none';
+                return;
+            }
+            
+            const cidadesFiltradas = cidades.filter(cidade => 
+                cidade.toLowerCase().includes(texto)
+            );
+            
+            if (cidadesFiltradas.length === 0) {
+                sugestoesDiv.style.display = 'none';
+                return;
+            }
+            
+            cidadesFiltradas.forEach(cidade => {
+                const div = document.createElement('div');
+                div.textContent = cidade;
+                div.addEventListener('click', function() {
+                    cidadeInput.value = cidade;
+                    sugestoesDiv.style.display = 'none';
+                });
+                sugestoesDiv.appendChild(div);
+            });
+            
+            sugestoesDiv.style.display = 'block';
+        }
+
+        document.addEventListener('click', function(e) {
+            if (e.target !== cidadeInput) {
+                sugestoesDiv.style.display = 'none';
             }
         });
     </script>
