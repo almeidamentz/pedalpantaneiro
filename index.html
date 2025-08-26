@@ -78,6 +78,7 @@
         
         .form-group {
             margin-bottom: 25px;
+            position: relative;
         }
         
         .form-group label {
@@ -103,6 +104,20 @@
             background: #fff;
             box-shadow: 0 0 0 3px rgba(0, 86, 179, 0.1);
             outline: none;
+        }
+        
+        .error-message {
+            color: #d9534f;
+            font-size: 0.9em;
+            margin-top: 5px;
+            display: none;
+        }
+        
+        .success-message {
+            color: #28a745;
+            font-size: 0.9em;
+            margin-top: 5px;
+            display: none;
         }
         
         .declaration {
@@ -218,6 +233,10 @@
             .buttons {
                 display: none;
             }
+            
+            .error-message, .success-message {
+                display: none !important;
+            }
         }
     </style>
 </head>
@@ -241,6 +260,8 @@
             <div class="form-group">
                 <label for="idadeMenor">Idade do menor:</label>
                 <input type="number" id="idadeMenor" name="idadeMenor" placeholder="Idade" min="1" max="17" required>
+                <div id="idadeError" class="error-message"></div>
+                <div id="idadeSuccess" class="success-message"></div>
             </div>
 
             <div class="form-group">
@@ -260,8 +281,8 @@
                     <option value="Poconé">Poconé</option>
                     <option value="Cuiabá">Cuiabá</option>
                     <option value="Várzea Grande">Várzea Grande</option>
-					  <option value="Tangará da Serra">Tangará da Serra</option>
-					<option value="Outra">Nossa Senhora do Livramento</option>
+                    <option value="Tangará da Serra">Tangará da Serra</option>
+                    <option value="Outra">Nossa Senhora do Livramento</option>
                 </select>
             </div>
 
@@ -283,6 +304,7 @@
             <div class="buttons">
                 <button type="button" class="btn btn-primary" onclick="window.print()">🖨️ Imprimir Formulário</button>
                 <button type="button" class="btn btn-secondary" onclick="limparFormulario()">🗑️ Limpar Campos</button>
+                <button type="button" class="btn btn-primary" onclick="validarIdade()">✅ Validar Idade</button>
             </div>
         </div>
     </div>
@@ -294,8 +316,45 @@
                     input.value = '';
                 });
                 document.getElementById('cidade').value = '';
+                // Limpar mensagens de validação
+                document.getElementById('idadeError').style.display = 'none';
+                document.getElementById('idadeSuccess').style.display = 'none';
             }
         }
+
+        // Função para validar a idade
+        function validarIdade() {
+            const idadeInput = document.getElementById('idadeMenor');
+            const errorDiv = document.getElementById('idadeError');
+            const successDiv = document.getElementById('idadeSuccess');
+            const idade = parseInt(idadeInput.value);
+            
+            // Esconder mensagens anteriores
+            errorDiv.style.display = 'none';
+            successDiv.style.display = 'none';
+            
+            // Verificar se o campo está vazio
+            if (isNaN(idade)) {
+                errorDiv.textContent = 'Por favor, informe a idade do menor.';
+                errorDiv.style.display = 'block';
+                return;
+            }
+            
+            // Validar faixa etária
+            if (idade < 14) {
+                errorDiv.textContent = 'Idade fora da faixa permitida. O evento é apenas para menores entre 14 e 17 anos.';
+                errorDiv.style.display = 'block';
+            } else if (idade >= 18) {
+                errorDiv.textContent = 'Maior de idade. Este formulário é apenas para menores de 18 anos.';
+                errorDiv.style.display = 'block';
+            } else {
+                successDiv.textContent = 'Idade válida! O menor está na faixa etária permitida.';
+                successDiv.style.display = 'block';
+            }
+        }
+
+        // Validar idade quando o campo perder o foco
+        document.getElementById('idadeMenor').addEventListener('blur', validarIdade);
 
         // Máscara para CPF
         document.getElementById('cpfResponsavel').addEventListener('input', function(e) {
@@ -328,5 +387,4 @@
         });
     </script>
 </body>
-
 </html>
