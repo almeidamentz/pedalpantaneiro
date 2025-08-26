@@ -309,6 +309,8 @@
             <div class="form-group">
                 <label for="emailResponsavel">E-mail do responsável:</label>
                 <input type="email" id="emailResponsavel" name="emailResponsavel" placeholder="seuemail@exemplo.com">
+                <div id="emailError" class="error-message"></div>
+                <div id="emailSuccess" class="success-message"></div>
             </div>
 
             <div class="form-group">
@@ -360,6 +362,8 @@
                 document.getElementById('idadeSuccess').style.display = 'none';
                 document.getElementById('cpfError').style.display = 'none';
                 document.getElementById('cpfSuccess').style.display = 'none';
+                document.getElementById('emailError').style.display = 'none';
+                document.getElementById('emailSuccess').style.display = 'none';
             }
         }
 
@@ -454,11 +458,42 @@
             successDiv.style.display = 'block';
         }
 
+        // Função para validar email
+        function validarEmail() {
+            const emailInput = document.getElementById('emailResponsavel');
+            const errorDiv = document.getElementById('emailError');
+            const successDiv = document.getElementById('emailSuccess');
+            const email = emailInput.value.trim();
+            
+            // Esconder mensagens anteriores
+            errorDiv.style.display = 'none';
+            successDiv.style.display = 'none';
+            
+            // Se o campo estiver vazio, não mostrar erro (não é obrigatório)
+            if (email === '') {
+                return;
+            }
+            
+            // Validar formato de email
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            
+            if (!emailRegex.test(email)) {
+                errorDiv.textContent = 'Por favor, informe um endereço de email válido (deve conter @ e um domínio).';
+                errorDiv.style.display = 'block';
+            } else {
+                successDiv.textContent = 'Email válido!';
+                successDiv.style.display = 'block';
+            }
+        }
+
         // Validar idade quando o campo perder o foco
         document.getElementById('idadeMenor').addEventListener('blur', validarIdade);
         
         // Validar CPF quando o campo perder o foco
         document.getElementById('cpfResponsavel').addEventListener('blur', validarCPF);
+        
+        // Validar email quando o campo perder o foco
+        document.getElementById('emailResponsavel').addEventListener('blur', validarEmail);
 
         // Máscara para CPF com limitação de caracteres
         document.getElementById('cpfResponsavel').addEventListener('input', function(e) {
