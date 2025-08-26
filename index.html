@@ -106,6 +106,14 @@
             outline: none;
         }
         
+        /* Estilo específico para o campo de data (somente leitura) */
+        .form-group input[readonly] {
+            background-color: #f0f0f0;
+            border: 2px solid #d1d1d1;
+            color: #555;
+            cursor: not-allowed;
+        }
+        
         .error-message {
             color: #d9534f;
             font-size: 0.9em;
@@ -328,7 +336,7 @@
 
             <div class="form-group">
                 <label for="dataAtual">Data:</label>
-                <input type="text" id="dataAtual" name="dataAtual" placeholder="DD de Mês de AAAA" required>
+                <input type="text" id="dataAtual" name="dataAtual" readonly>
             </div>
 
             <div class="declaration">
@@ -354,7 +362,10 @@
         function limparFormulario() {
             if (confirm('Tem certeza que deseja limpar todos os campos?')) {
                 document.querySelectorAll('input').forEach(input => {
-                    input.value = '';
+                    // Não limpar o campo de data
+                    if (input.id !== 'dataAtual') {
+                        input.value = '';
+                    }
                 });
                 // Limpar mensagens de validação
                 document.getElementById('idadeError').style.display = 'none';
@@ -514,7 +525,7 @@
             e.target.value = value;
         });
 
-        // Auto-completar data atual
+        // Auto-completar data atual (sem possibilidade de alteração)
         document.addEventListener('DOMContentLoaded', function() {
             const hoje = new Date();
             const meses = ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 
@@ -522,9 +533,8 @@
             const dataFormatada = `${hoje.getDate()} de ${meses[hoje.getMonth()]} de ${hoje.getFullYear()}`;
             
             const campoData = document.getElementById('dataAtual');
-            if (campoData.value === '') {
-                campoData.value = dataFormatada;
-            }
+            campoData.value = dataFormatada;
+            campoData.setAttribute('readonly', 'true');
         });
 
         // Sugestões de cidades
