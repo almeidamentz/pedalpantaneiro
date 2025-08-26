@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Termo de Autorização - 4º Pedal Pantaneiro</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: #fff;
+            border-radius: 15px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #0056b3 0%, #004494 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+        
+        .header h1 {
+            font-size: 1.8em;
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+        
+        .header p {
+            opacity: 0.9;
+            font-size: 1.1em;
+        }
+        
+        .form-content {
+            padding: 40px;
+        }
+        
+        .intro-text {
+            margin-bottom: 30px;
+            font-size: 1.1em;
+            line-height: 1.8;
+        }
+        
+        .inline-field {
+            display: inline-block;
+            border-bottom: 2px solid #0056b3;
+            min-width: 300px; /* Alterado para maior tamanho */
+            padding: 2px 8px;
+            margin: 0 5px;
+            background: transparent;
+            border-top: none;
+            border-left: none;
+            border-right: none;
+            font-size: inherit;
+            font-family: inherit;
+            outline: none;
+            transition: border-color 0.3s ease;
+        }
+        
+        .inline-field:focus {
+            border-bottom-color: #667eea;
+        }
+        
+        .form-group {
+            margin-bottom: 25px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #333;
+            font-size: 1.1em;
+        }
+        
+        .form-group input, .form-group select {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #e1e5e9;
+            border-radius: 8px;
+            font-size: 1em;
+            transition: all 0.3s ease;
+            background: #f8f9fa;
+        }
+        
+        .form-group input:focus, .form-group select:focus {
+            border-color: #0056b3;
+            background: #fff;
+            box-shadow: 0 0 0 3px rgba(0, 86, 179, 0.1);
+            outline: none;
+        }
+        
+        .declaration {
+            margin: 40px 0;
+            padding: 25px;
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            border-left: 5px solid #0056b3;
+            border-radius: 8px;
+            font-size: 1.1em;
+            line-height: 1.8;
+        }
+        
+        .signature-section {
+            margin-top: 50px;
+            text-align: center;
+        }
+        
+        .signature-line {
+            width: 300px;
+            height: 60px;
+            border-bottom: 2px solid #333;
+            margin: 20px auto;
+            position: relative;
+        }
+        
+        .signature-label {
+            margin-top: 10px;
+            font-weight: 600;
+            color: #666;
+        }
+        
+        .buttons {
+            margin-top: 30px;
+            text-align: center;
+            gap: 15px;
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        
+        .btn {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, #0056b3 0%, #004494 100%);
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 86, 179, 0.3);
+        }
+        
+        .btn-secondary {
+            background: #6c757d;
+            color: white;
+        }
+        
+        .btn-secondary:hover {
+            background: #5a6268;
+            transform: translateY(-2px);
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                margin: 10px;
+                border-radius: 10px;
+            }
+            
+            .form-content {
+                padding: 20px;
+            }
+            
+            .header {
+                padding: 20px;
+            }
+            
+            .header h1 {
+                font-size: 1.5em;
+            }
+            
+            .buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .btn {
+                width: 100%;
+                max-width: 250px;
+            }
+        }
+        
+        @media print {
+            body {
+                background: white;
+                padding: 0;
+            }
+            
+            .container {
+                box-shadow: none;
+                border-radius: 0;
+            }
+            
+            .buttons {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>4º Pedal Pantaneiro</h1>
+            <p>Termo de Autorização para Menores de 18 anos</p>
+        </div>
+        
+        <div class="form-content">
+            <div class="intro-text">
+                <p>Eu, <input type="text" class="inline-field" id="nomeResponsavel" name="nomeResponsavel" placeholder="Nome completo do(a) responsável" required>, portador(a) do CPF nº <input type="text" class="inline-field" id="cpfResponsavel" name="cpfResponsavel" placeholder="___.___.___-__" style="min-width: 150px;" required>, responsável legal pelo(a) menor:</p>
+            </div>
+            
+            <div class="form-group">
+                <label for="nomeMenor">Nome completo do menor:</label>
+                <input type="text" id="nomeMenor" name="nomeMenor" placeholder="Digite o nome completo do(a) menor" required>
+            </div>
+
+            <div class="form-group">
+                <label for="idadeMenor">Idade do menor:</label>
+                <input type="number" id="idadeMenor" name="idadeMenor" placeholder="Idade" min="1" max="17" required>
+            </div>
+
+            <div class="form-group">
+                <label for="telefoneResponsavel">Telefone do responsável:</label>
+                <input type="tel" id="telefoneResponsavel" name="telefoneResponsavel" placeholder="(XX) XXXXX-XXXX" required>
+            </div>
+
+            <div class="form-group">
+                <label for="emailResponsavel">E-mail do responsável (opcional):</label>
+                <input type="email" id="emailResponsavel" name="emailResponsavel" placeholder="seuemail@exemplo.com">
+            </div>
+
+            <div class="form-group">
+                <label for="cidade">Cidade:</label>
+                <select id="cidade" name="cidade" required>
+                    <option value="">Selecione uma cidade...</option>
+                    <option value="Poconé">Poconé</option>
+                    <option value="Cuiabá">Cuiabá</option>
+                    <option value="Várzea Grande">Várzea Grande</option>
+					  <option value="Tangará da Serra">Tangará da Serra</option>
+					<option value="Outra">Nossa Senhora do Livramento</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="dataAtual">Data:</label>
+                <input type="text" id="dataAtual" name="dataAtual" placeholder="DD de Mês de AAAA" required>
+            </div>
+
+            <div class="declaration">
+                <p><strong>DECLARAÇÃO DE RESPONSABILIDADE:</strong></p>
+                <p>Declaro estar ciente de que a organização do evento <strong>4º Pedal Pantaneiro</strong> não se responsabiliza por acidentes ou imprevistos decorrentes da participação, cabendo a mim a total responsabilidade pelo(a) menor acima identificado(a). Autorizo a participação do(a) menor no evento e assumo todos os riscos inerentes à atividade.</p>
+            </div>
+
+            <div class="signature-section">
+                <div class="signature-line"></div>
+                <div class="signature-label">Assinatura do responsável legal</div>
+            </div>
+
+            <div class="buttons">
+                <button type="button" class="btn btn-primary" onclick="window.print()">🖨️ Imprimir Formulário</button>
+                <button type="button" class="btn btn-secondary" onclick="limparFormulario()">🗑️ Limpar Campos</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function limparFormulario() {
+            if (confirm('Tem certeza que deseja limpar todos os campos?')) {
+                document.querySelectorAll('input').forEach(input => {
+                    input.value = '';
+                });
+                document.getElementById('cidade').value = '';
+            }
+        }
+
+        // Máscara para CPF
+        document.getElementById('cpfResponsavel').addEventListener('input', function(e) {
+            let value = e.target.value.replace(/\D/g, '');
+            value = value.replace(/(\d{3})(\d)/, '$1.$2');
+            value = value.replace(/(\d{3})(\d)/, '$1.$2');
+            value = value.replace(/(\d{3})(\d{1,2})$/, '$1-$2');
+            e.target.value = value;
+        });
+
+        // Máscara para telefone
+        document.getElementById('telefoneResponsavel').addEventListener('input', function(e) {
+            let value = e.target.value.replace(/\D/g, '');
+            value = value.replace(/(\d{2})(\d)/, '($1) $2');
+            value = value.replace(/(\d{5})(\d)/, '$1-$2');
+            e.target.value = value;
+        });
+
+        // Auto-completar data atual
+        document.addEventListener('DOMContentLoaded', function() {
+            const hoje = new Date();
+            const meses = ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 
+                          'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'];
+            const dataFormatada = `${hoje.getDate()} de ${meses[hoje.getMonth()]} de ${hoje.getFullYear()}`;
+            
+            const campoData = document.getElementById('dataAtual');
+            if (campoData.value === '') {
+                campoData.value = dataFormatada;
+            }
+        });
+    </script>
+</body>
+</html>
